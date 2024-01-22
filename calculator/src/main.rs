@@ -1,46 +1,63 @@
-use std::env;
-
-
+use std::io;
 fn main() {
-    let args:Vec<String> = env::args().collect();
+    loop {
+        let user_input: (f64, f64, char) = get_user_input();
+        let n1: f64 = user_input.0;
+        let n2: f64 = user_input.1;
+        let o: char = user_input.2;
+        if o == '+' {
+            println!("{} + {} = {}", n1, n2, add(n1, n2))
+        } else if o == '-' {
+            println!("{} - {} = {}", n1, n2, sub(n1, n2))
+        } else if o == '*' {
+            println!("{} * {} = {}", n1, n2, multi(n1, n2))
+        } else if o == '/' {
+            println!("{} / {} = {}", n1, n2, divid(n1, n2))
+        } else if o == 'C' {
+            break;
+        }
+        else {
+            println!("Wrong operand or Not support!(for exit press C)")
+        }
 
-    if args.len() != 4{
-        println!("Usage: {} <number> <operation> <number>", args[0]);
-        return;
     }
+}
+fn get_user_input() -> (f64, f64, char) {
+    println!("Please enter the first number: ");
+    let mut first_number: String = String::new();
+    io::stdin()
+        .read_line(&mut first_number)
+        .expect("Failed to read line");
+    let first_number: f64 = first_number.trim().parse().expect("Not a number");
 
-    let num1:f64 = match args[1].parse() {
-        Ok(num) => num,
-        Err(_) => {
-            println!("Error: Invalid number");
-            return;
-        }
-    };
-    let num2:f64 = match args[3].parse() {
-        Ok(num) => num,
-        Err(_) => {
-            println!("Error: Invalid number");
-            return;
-        }
-    };
+    println!("Please enter the second number: ");
+    let mut second_number: String = String::new();
+    io::stdin()
+        .read_line(&mut second_number)
+        .expect("Failed to read line");
+    let second_number: f64 = second_number.trim().parse().expect("Not a number");
 
-    let result= match args[2].as_str() {
-        "+" => num1+num2,
-        "-" => num1+num2,
-        "*" => num1+num2,
-        "/" => {
-            if num2 != 0.0 {
-                num1/num2
-            }else {
-                println!("ZeroDevisionException");
-                return;
-            }
-        } _ =>{
-            println!("Please enter one of +, -, *, /");
-            return;
-        }
-        
-    };
-    println!("Result: {}", result);
+    println!("Please enter the operand(+, _, *, /): ");
+    let mut operand: String = String::new();
+    io::stdin()
+        .read_line(&mut operand)
+        .expect("Failed to read line");
+    let operand: char = operand.trim().parse().expect("not a char");
 
+    (first_number, second_number, operand)
+}
+
+fn add(first_number: f64, second_number: f64) -> f64 {
+    first_number + second_number
+}
+fn sub(first_number: f64, second_number: f64) -> f64 {
+    first_number - second_number
+}
+
+fn multi(first_number: f64, second_number: f64) -> f64 {
+    first_number * second_number
+}
+
+fn divid(first_number: f64, second_number: f64) -> f64 {
+    first_number / second_number
 }
